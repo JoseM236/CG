@@ -76,7 +76,6 @@ int main(int argc, char** argv)
     init();
     glutDisplayFunc(display); 
     glutReshapeFunc(reshape);
-    glutKeyboardFunc(keyboard);
     glutMainLoop();
     return 0;
 }
