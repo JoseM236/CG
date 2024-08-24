@@ -28,8 +28,8 @@ void init(void)
     glEnable(GL_DEPTH_TEST);
     
     // Carregue as texturas
-    loadTexture("sun.jpg", &textureSun);
-    loadTexture("planet.jpg", &texturePlanet);
+    loadTexture("sol.jpg", &textureSun);
+    loadTexture("terra.jpg", &texturePlanet);
 }
 
 void display(void)
