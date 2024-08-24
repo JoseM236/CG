@@ -39,19 +39,19 @@ void reshape (int w, int h)
 void keyboard (unsigned char key, int x, int y)
 {
    switch (key) {
-      case `d':
+      case 'd':
          day = (day + 10) % 360;
          glutPostRedisplay();
          break;
-      case `D':
+      case 'D':
          day = (day - 10) % 360;
          glutPostRedisplay();
          break;
-      case `y':
+      case 'y':
          year = (year + 5) % 360;
          glutPostRedisplay();
          break;
-      case `Y':
+      case 'Y':
          year = (year - 5) % 360;
          glutPostRedisplay();
          break;
