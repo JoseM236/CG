@@ -1,64 +1,83 @@
 #include <GL/glut.h>
-#include <GL/glu.h>
-#include <SOIL/SOIL.h>
+#include <SOIL/SOIL.h> // Biblioteca para carregar texturas
+#include <math.h>
 
+// Variáveis para controle de rotação
+GLfloat angle = 0.0f;
+
+// ID da textura
 GLuint texture;
 
-void loadTexture() {
+void init() {
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    
+    // Carregar a textura do Sol usando SOIL
     texture = SOIL_load_OGL_texture(
-        "sol.jpg",  // caminho para a imagem da textura
-        SOIL_LOAD_AUTO,
-        SOIL_CREATE_NEW_ID,
+        "sol.jpg", 
+        SOIL_LOAD_AUTO, 
+        SOIL_CREATE_NEW_ID, 
         SOIL_FLAG_INVERT_Y
     );
 
     if (!texture) {
-        printf("Erro ao carregar a textura: '%s'\n", SOIL_last_result());
-        exit(1);
+        printf("Falha ao carregar a textura: %s\n", SOIL_last_result());
     }
 
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    // Configurações de textura
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-}
-
-void init() {
-    glEnable(GL_TEXTURE_2D);    // Ativar texturas
-    loadTexture();
+    
+    // Configuração de iluminação
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    GLfloat light_pos[] = {0.0f, 0.0f, 1.0f, 0.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
 }
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-
-    // Posicionar a esfera
-    glTranslatef(0.0f, 0.0f, -5.0f);
+    
+    // Definir a câmera
+    gluLookAt(0.0f, 0.0f, 5.0f,  // Posição da câmera
+              0.0f, 0.0f, 0.0f,  // Para onde a câmera aponta
+              0.0f, 1.0f, 0.0f); // Para cima
 
     glBindTexture(GL_TEXTURE_2D, texture);
 
-    // Criar a esfera e aplicar a textura
-    GLUquadric* quad = gluNewQuadric();
-    gluQuadricTexture(quad, GL_TRUE);
-    gluSphere(quad, 1.0, 50, 50);  // raio 1.0, subdivisões 50x50
+    // Rotacionar o Sol
+    glRotatef(angle, 0.0f, 1.0f, 0.0f);
 
+    // Criar a esfera e aplicar a textura
+    GLUquadric* quad;
+    quad = gluNewQuadric();
+    gluQuadricTexture(quad, GL_TRUE);
+    gluSphere(quad, 1.0f, 50, 50);
     gluDeleteQuadric(quad);
 
     glutSwapBuffers();
+}
+
+void timer(int value) {
+    angle += 0.2f;  // Controla a velocidade de rotação
+    if (angle > 360.0f) {
+        angle -= 360.0f;
+    }
+    glutPostRedisplay();
+    glutTimerFunc(16, timer, 0);  // Aproximadamente 60 FPS
 }
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Textura do Sol em OpenGL");
+    glutCreateWindow("Sol Girando em OpenGL");
 
     init();
 
     glutDisplayFunc(display);
+    glutTimerFunc(0, timer, 0);
+
     glutMainLoop();
     return 0;
 }
