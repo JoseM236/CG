@@ -9,3 +9,7 @@ sudo apt-get install libsoil-dev
 g++ -o sistema_solar sistema_solar.cpp -lGL -lGLU -lglut -lSOIL
 
 ./sistema_solar
+
+
+gcc -o solar_system solar_system.c -lGL -lGLU -lglut -lSOIL -lm
+./solar_system
