@@ -1,134 +1,72 @@
 #include <GL/glut.h>
 #include <SOIL/SOIL.h>
 
-// IDs das texturas
-GLuint texturaSol;
-GLuint texturaMercurio;
-GLuint texturaVenus;
-GLuint texturaTerra;
-GLuint texturaMarte;
-GLuint texturaJupiter;
-GLuint texturaSaturno;
-GLuint texturaUrano;
-GLuint texturaNetuno;
+// Tamanhos dos planetas e Sol
+float planetSizes[] = {0.383, 0.949, 1.0, 0.532, 11.21, 9.45, 4.01, 3.88, 0.186};
+float planetDistances[] = {5.8, 10.8, 15.0, 22.8, 77.8, 143.0, 287.0, 450.0, 590.0};
+GLuint textures[10];
 
-// Função para carregar a textura a partir de um arquivo
-GLuint carregarTextura(const char* arquivo) {
-    GLuint id = SOIL_load_OGL_texture(
-        arquivo,
-        SOIL_LOAD_AUTO,
-        SOIL_CREATE_NEW_ID,
-        SOIL_FLAG_MIPMAPS | SOIL_FLAG_TEXTURE_REPEATS
-    );
+void loadTextures() {
+    const char* filenames[] = {
+        "sun.jpg", "mercury.jpg", "venus.jpg", "earth.jpg", 
+        "mars.jpg", "jupiter.jpg", "saturn.jpg", "uranus.jpg", 
+        "neptune.jpg", "pluto.jpg"
+    };
     
-    if (id == 0) {
-        printf("Erro ao carregar a textura: '%s'\n", arquivo);
+    glGenTextures(10, textures);
+
+    for (int i = 0; i < 10; i++) {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        int width, height;
+        unsigned char* image = SOIL_load_image(filenames[i], &width, &height, 0, SOIL_LOAD_RGB);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        SOIL_free_image_data(image);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
-    
-    return id;
 }
 
-// Função para desenhar uma esfera com textura
-void desenharEsfera(GLfloat raio, GLuint textura) {
+void drawSphere(float size, GLuint texture) {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textura);
+    glBindTexture(GL_TEXTURE_2D, texture);
     GLUquadric* quad = gluNewQuadric();
     gluQuadricTexture(quad, GL_TRUE);
-    gluSphere(quad, raio, 50, 50);
+    gluSphere(quad, size, 50, 50);
     gluDeleteQuadric(quad);
     glDisable(GL_TEXTURE_2D);
 }
 
-// Função de exibição
-void display(void) {
+void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    
-    // Sol
-    glPushMatrix();
-    glTranslatef(0.0f, 0.0f, 0.0f); // Posição do Sol
-    desenharEsfera(2.0f, texturaSol); // Tamanho do Sol
-    glPopMatrix();
-    
-    // Mercúrio
-    glPushMatrix();
-    glTranslatef(4.0f, 0.0f, 0.0f); // Posição de Mercúrio
-    desenharEsfera(0.4f, texturaMercurio); // Tamanho de Mercúrio
-    glPopMatrix();
-    
-    // Vênus
-    glPushMatrix();
-    glTranslatef(7.0f, 0.0f, 0.0f); // Posição de Vênus
-    desenharEsfera(0.95f, texturaVenus); // Tamanho de Vênus
-    glPopMatrix();
-    
-    // Terra
-    glPushMatrix();
-    glTranslatef(10.0f, 0.0f, 0.0f); // Posição da Terra
-    desenharEsfera(1.0f, texturaTerra); // Tamanho da Terra
-    glPopMatrix();
-    
-    // Marte
-    glPushMatrix();
-    glTranslatef(15.0f, 0.0f, 0.0f); // Posição de Marte
-    desenharEsfera(0.53f, texturaMarte); // Tamanho de Marte
-    glPopMatrix();
-    
-    // Júpiter
-    glPushMatrix();
-    glTranslatef(20.0f, 0.0f, 0.0f); // Posição de Júpiter
-    desenharEsfera(1.5f, texturaJupiter); // Tamanho de Júpiter
-    glPopMatrix();
-    
-    // Saturno
-    glPushMatrix();
-    glTranslatef(30.0f, 0.0f, 0.0f); // Posição de Saturno
-    desenharEsfera(1.2f, texturaSaturno); // Tamanho de Saturno
-    glPopMatrix();
-    
-    // Urano
-    glPushMatrix();
-    glTranslatef(40.0f, 0.0f, 0.0f); // Posição de Urano
-    desenharEsfera(1.0f, texturaUrano); // Tamanho de Urano
-    glPopMatrix();
-    
-    // Netuno
-    glPushMatrix();
-    glTranslatef(50.0f, 0.0f, 0.0f); // Posição de Netuno
-    desenharEsfera(1.0f, texturaNetuno); // Tamanho de Netuno
-    glPopMatrix();
+    gluLookAt(0.0, 0.0, 1000.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+
+    // Desenha o Sol no centro
+    drawSphere(5.0, textures[0]);
+
+    // Desenha os planetas
+    for (int i = 0; i < 9; i++) {
+        glPushMatrix();
+        glTranslatef(planetDistances[i], 0.0, 0.0);
+        drawSphere(planetSizes[i], textures[i + 1]);
+        glPopMatrix();
+    }
 
     glutSwapBuffers();
 }
 
-// Inicialização das texturas e OpenGL
-void init(void) {
+void init() {
     glEnable(GL_DEPTH_TEST);
-    
-    texturaSol = carregarTextura("sol.jpg");
-    texturaMercurio = carregarTextura("mercurio.jpg");
-    texturaVenus = carregarTextura("venus.jpg");
-    texturaTerra = carregarTextura("terra.jpg");
-    texturaMarte = carregarTextura("marte.jpg");
-    texturaJupiter = carregarTextura("jupiter.jpg");
-    texturaSaturno = carregarTextura("saturno.jpg");
-    texturaUrano = carregarTextura("urano.jpg");
-    texturaNetuno = carregarTextura("netuno.jpg");
-    
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    loadTextures();
 }
 
-// Função principal
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600);
-    glutCreateWindow("Sistema Solar");
-    
+    glutCreateWindow("Solar System");
     init();
-    
     glutDisplayFunc(display);
     glutMainLoop();
-    
     return 0;
 }
