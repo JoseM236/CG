@@ -2,7 +2,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <stdio.h>
-#include "SOIL.h"  // Inclua a biblioteca SOIL para carregamento de texturas
+#include <SOIL/SOIL.h> // Inclua a biblioteca SOIL para carregamento de texturas
 
 GLuint textureSun, texturePlanet;
 
