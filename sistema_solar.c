@@ -66,30 +66,6 @@ void reshape (int w, int h)
     glLoadIdentity();
 }
 
-void keyboard (unsigned char key, int x, int y)
-{
-    switch (key) {
-        case 'd':
-            day = (day + 10) % 360;
-            glutPostRedisplay();
-            break;
-        case 'D':
-            day = (day - 10) % 360;
-            glutPostRedisplay();
-            break;
-        case 'y':
-            year = (year + 5) % 360;
-            glutPostRedisplay();
-            break;
-        case 'Y':
-            year = (year - 5) % 360;
-            glutPostRedisplay();
-            break;
-        default:
-            break;
-    }
-}
-
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
