@@ -1,5 +1,5 @@
-#include <SDL/SDL.h>
-#include "SDL/SDL_opengl.h"
+//#include <SDL/SDL.h>
+//#include "SDL/SDL_opengl.h"
 #include <SOIL/SOIL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -82,7 +82,7 @@ void defBase() {
 }
 
 int main(int argc, char* args[]) {
-    SDL_Init(SDL_INIT_EVERYTHING);
+    //SDL_Init(SDL_INIT_EVERYTHING);
     glutInit(&argc, args);
     glutInitContextVersion(1, 1);
     glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
@@ -97,7 +97,7 @@ int main(int argc, char* args[]) {
     glutReshapeFunc(configJanela);
     defBase();
     glutMainLoop(); // Loop
-    SDL_Quit(); 
+    //SDL_Quit(); 
 
     return 0;
 }
