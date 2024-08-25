@@ -15,7 +15,7 @@ typedef struct {
 Astro sol;
 
 //---------------------------------------------------- Carregamento de Texturas ------------------------------------------------------------
-GLuint carregaTextura(const char* arquivo) {
+GLuint carregarTextura(const char* arquivo) {
     GLuint idTextura = SOIL_load_OGL_texture(
                         arquivo,
                         SOIL_LOAD_AUTO,
@@ -60,7 +60,7 @@ void estadoExecucao() {
     glutSwapBuffers();
 }
 
-void confJanela(int w, int h) {
+void configJanela(int w, int h) {
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
@@ -69,14 +69,13 @@ void confJanela(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-/* Define estado inicial dos componentes */
-void defineBase() {
+void defBase() {
     glClearColor(0, 0, 0, 0.0);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Sol
-    sol.Texture = carregaTextura("sol.jpg");
+    sol.Texture = carregarTextura("sol.jpg");
     sol.Faces = 200;
 
     //...
@@ -88,17 +87,17 @@ int main(int argc, char* args[]) {
     glutInitContextVersion(1, 1);
     glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
 
-    // Configurações da Janela
+    // Configs da Janela
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(1400, 840);
     glutCreateWindow("test texture");
 
-    // Chama nossas funções principais
+    // funções principais
     glutDisplayFunc(estadoExecucao);
-    glutReshapeFunc(confJanela);
-    defineBase(); // Processos Iniciais
+    glutReshapeFunc(configJanela);
+    defBase();
     glutMainLoop(); // Loop
-    SDL_Quit(); // Encerra o SDL
+    SDL_Quit(); 
 
     return 0;
 }
