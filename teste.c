@@ -88,8 +88,8 @@ void defineBase() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // SOL
-    sun.Texture = carregaTextura("sol.jpg");
-    sun.Faces = 200;
+    sol.Texture = carregaTextura("sol.jpg");
+    sol.Faces = 200;
 
     // MERCÚRIO
     mercurio.Texture = carregaTextura("mercurio.jpg");
