@@ -93,7 +93,7 @@ void defineBase() {
 
     // MERCÚRIO
     mercurio.Texture = carregaTextura("mercurio.jpg");
-    mercurio.TamanhoTranslacao = 150;
+    mercurio.TamanhoTranslacao = 400;
     mercurio.Faces = 200;
 }
 
