@@ -10,11 +10,11 @@ typedef struct {
     int Faces;
     int TamanhoTranslacao;
     GLuint Texture;
-} Corpo;
+} Astro;
 
-// Variáveis dos Corpos
-Corpo sun;
-Corpo mercury;
+// Variáveis dos Astros
+Astro sol;
+Astro mercurio;
 
 //---------------------------------------------------- Carregamento de Texturas ------------------------------------------------------------
 GLuint carregaTextura(const char* arquivo) {
@@ -42,21 +42,21 @@ void criaSphere(float radius, int stacks, int columns) {
     gluDeleteQuadric(quadObj);
 }
 
-void renderizaAstroRei() {
+void renderizaSol() {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, sun.Texture);
+    glBindTexture(GL_TEXTURE_2D, sol.Texture);
     glPushMatrix();
-    criaSphere(100, sun.Faces, sun.Faces);
+    criaSphere(100, sol.Faces, sol.Faces);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
 
 void renderizaCorpos() {
     glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, mercury.Texture);
+    glBindTexture(GL_TEXTURE_2D, mercurio.Texture);
     glPushMatrix();
-    glTranslatef(mercury.TamanhoTranslacao, 0.0, 0);
-    criaSphere(0.5, mercury.Faces, mercury.Faces);
+    glTranslatef(mercurio.TamanhoTranslacao, 0.0, 0);
+    criaSphere(0.5, mercurio.Faces, mercurio.Faces);
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
 }
@@ -65,8 +65,8 @@ void renderizaCorpos() {
 void estadoExecucao() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(0, 0, 800, 0, 0, 0, 0, 1, 0);  // Camera fixa
-    renderizaAstroRei();
+    gluLookAt(0, 0, 500, 0, 0, 0, 0, 1, 0);  // Camera fixa
+    renderizaSol();
     renderizaCorpos();
     glutSwapBuffers();
 }
@@ -92,9 +92,9 @@ void defineBase() {
     sun.Faces = 200;
 
     // MERCÚRIO
-    mercury.Texture = carregaTextura("mercurio.jpg");
-    mercury.TamanhoTranslacao = 126;
-    mercury.Faces = 200;
+    mercurio.Texture = carregaTextura("mercurio.jpg");
+    mercurio.TamanhoTranslacao = 150;
+    mercurio.Faces = 200;
 }
 
 int main(int argc, char* args[]) {
