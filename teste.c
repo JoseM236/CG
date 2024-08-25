@@ -89,7 +89,7 @@ int main(int argc, char* args[]) {
 
     // Configs da Janela
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(1400, 840);
+    glutInitWindowSize(1000, 1000);
     glutCreateWindow("test texture");
 
     // funções principais
